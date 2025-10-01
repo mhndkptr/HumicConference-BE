@@ -21,7 +21,7 @@ You will need the following software installed on your system:
 1.  **Clone the repository:**
 
     ```bash
-    git clone [https://github.com/mhndkptr/HumicConference-BE.git](https://github.com/mhndkptr/HumicConference-BE.git)
+    git clone https://github.com/mhndkptr/HumicConference-BE.git
     cd HumicConference-BE
     ```
 
