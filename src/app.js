@@ -21,7 +21,6 @@ class ExpressApplication {
     this.port = port;
 
     //  __init__
-    this.setupRoute();
     this.setupMiddlewares([
       ...(process.env.NODE_ENV === "development" ? [morgan("dev")] : []),
       helmet(),
@@ -35,9 +34,11 @@ class ExpressApplication {
         parseBoolean: true,
         parseNumber: true,
       }),
-      errorHandler,
-      apicache.middleware("5 minutes"),
+      // apicache.middleware("5 minutes"),
     ]);
+    this.setupRoute();
+    // Error Handler
+    this.app.use(errorHandler);
   }
 
   setupMiddlewares(middlewaresArr) {

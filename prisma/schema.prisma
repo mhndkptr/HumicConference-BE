@@ -14,3 +14,26 @@ datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
 }
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN_ICICYTA
+  ADMIN_ICODSA
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String
+  password     String
+  profile_uri  String?
+  role         UserRole  
+  banned_at    DateTime?
+  verified_at  DateTime?
+  last_login   DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime?
+
+  @@map("users")
+}
