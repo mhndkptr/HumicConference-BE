@@ -6,7 +6,7 @@ const PORT = process.env.APP_PORT || 3000;
 const appInstance = new ExpressApplication(PORT);
 const app = appInstance.app;
 
-if (process.env.APP_NODE_ENV !== "cli") {
+if (process.env.NODE_ENV !== "cli") {
   const server = appInstance.start();
 
   process.on("SIGTERM", () => {
