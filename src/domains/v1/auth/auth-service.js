@@ -31,21 +31,6 @@ class AuthService {
       throw BaseError.badRequest("Invalid credentials");
     }
 
-    if (user.banned_at) {
-      throw BaseError.forbidden("Your account has been banned");
-    }
-
-    const updatedUser = await this.prisma.user.update({
-      where: {
-        id: user.id,
-      },
-      data: {
-        last_login: new Date(),
-      },
-    });
-
-    user = updatedUser;
-
     const accessToken = generateAccessToken(
       {
         id: user.id,
@@ -107,9 +92,7 @@ class AuthService {
         email: true,
         profile_uri: true,
         role: true,
-        last_login: true,
         verified_at: true,
-        banned_at: true,
         created_at: true,
         updated_at: true,
         deleted_at: true,

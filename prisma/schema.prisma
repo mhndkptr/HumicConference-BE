@@ -28,9 +28,7 @@ model User {
   password     String
   profile_uri  String?
   role         UserRole  
-  banned_at    DateTime?
   verified_at  DateTime?
-  last_login   DateTime?
   created_at   DateTime  @default(now())
   updated_at   DateTime  @updatedAt
   deleted_at   DateTime?

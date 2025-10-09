@@ -1,16 +1,15 @@
 import "dotenv/config";
-import apicache from "apicache";
 import compression from "compression";
 import errorHandler from "./middlewares/error-handler-middleware.js";
 import express from "express";
 import helmet from "helmet";
 import logger from "./utils/logger.js";
-import { queryParser } from "express-query-parser";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import routes from "./routes.js";
 import corsMiddleware from "./middlewares/cors-middleware.js";
 import BaseError from "./base-classes/base-error.js";
+import QueryString from "qs";
 
 class ExpressApplication {
   app;
@@ -20,6 +19,13 @@ class ExpressApplication {
     this.app = express();
     this.port = port;
 
+    this.app.set("query parser", (str) =>
+      QueryString.parse(str, {
+        allowDots: true,
+        depth: 10,
+      })
+    );
+
     //  __init__
     this.setupMiddlewares([
       ...(process.env.NODE_ENV === "development" ? [morgan("dev")] : []),
@@ -28,13 +34,7 @@ class ExpressApplication {
       corsMiddleware,
       cookieParser(),
       express.json(),
-      express.urlencoded({ extended: false }),
-      queryParser({
-        parseNull: true,
-        parseBoolean: true,
-        parseNumber: true,
-      }),
-      // apicache.middleware("5 minutes"),
+      express.urlencoded({ extended: true }),
     ]);
     this.setupRoute();
     // Error Handler
