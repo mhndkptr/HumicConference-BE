@@ -70,25 +70,11 @@ class AuthMiddleware {
       const user = req.user;
 
       if (!user) {
-        return next(
-          new BaseError(
-            401,
-            statusCodes.UNAUTHORIZED.message,
-            "UNAUTHORIZED",
-            "User Not Authenticated"
-          )
-        );
+        return next(BaseError.unauthorized("User Not Authenticated"));
       }
 
       if (!roles.includes(user.role)) {
-        return next(
-          new BaseError(
-            403,
-            statusCodes.FORBIDDEN.message,
-            "FORBIDDEN",
-            "Access Denied"
-          )
-        );
+        return next(BaseError.forbidden("Access Denied"));
       }
 
       next();
