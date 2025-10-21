@@ -1,8 +1,10 @@
-import Joi from "joi";
+import JoiDate from "@joi/date";
+import JoiBase from "joi";
 import ScheduleType from "../../../common/enums/schedule-type-enum.js";
 
 const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
-const datePattern = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+
+const Joi = JoiBase.extend(JoiDate);
 
 const getAllScheduleParamsSchema = Joi.object({
   get_all: Joi.boolean().optional().default(true),
@@ -39,10 +41,10 @@ const getAllScheduleParamsSchema = Joi.object({
 });
 
 const createScheduleSchema = Joi.object({
-  date: Joi.string().pattern(datePattern).required().messages({
-    "string.pattern.base": "Date must be in YYYY-MM-DD format.",
-    "string.empty": "Date is required.",
-    "any.required": "Date is required.",
+  date: Joi.date().format("YYYY-MM-DD").required().messages({
+    "date.base": "Start date must be a valid date.",
+    "date.format": "Start date must be in YYYY-MM-DD format.",
+    "any.required": "Start date is required.",
   }),
 
   type: Joi.string()
@@ -105,8 +107,9 @@ const createScheduleSchema = Joi.object({
 });
 
 const updateScheduleSchema = Joi.object({
-  date: Joi.string().pattern(datePattern).messages({
-    "string.pattern.base": "Date must be in YYYY-MM-DD format.",
+  date: Joi.date().format("YYYY-MM-DD").messages({
+    "date.base": "Start date must be a valid date.",
+    "date.format": "Start date must be in YYYY-MM-DD format.",
   }),
 
   type: Joi.string()

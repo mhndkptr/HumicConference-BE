@@ -1,5 +1,8 @@
-import Joi from "joi";
+import JoiDate from "@joi/date";
+import JoiBase from "joi";
 import ConferenceScheduleType from "../../../common/enums/conference-schedule-type-enum.js";
+
+const Joi = JoiBase.extend(JoiDate);
 
 const getAllConferenceScheduleParamsSchema = Joi.object({
   get_all: Joi.boolean().optional().default(true),
@@ -58,19 +61,19 @@ const createConferenceScheduleSchema = Joi.object({
       "string.pattern.base": "Year must only contain numbers.",
     }),
 
-  start_date: Joi.date().iso().required().messages({
+  start_date: Joi.date().format("YYYY-MM-DD").required().messages({
     "date.base": "Start date must be a valid date.",
-    "date.format": "Start date must be in ISO format (YYYY-MM-DDTHH:mm:ssZ).",
+    "date.format": "Start date must be in YYYY-MM-DD format.",
     "any.required": "Start date is required.",
   }),
 
   end_date: Joi.date()
-    .iso()
+    .format("YYYY-MM-DD")
     .greater(Joi.ref("start_date"))
     .required()
     .messages({
       "date.base": "End date must be a valid date.",
-      "date.format": "End date must be in ISO format (YYYY-MM-DDTHH:mm:ssZ).",
+      "date.format": "End date must be in YYYY-MM-DD format.",
       "any.required": "End date is required.",
       "date.greater": "End date must be after the start date.",
     }),
@@ -131,15 +134,19 @@ const updateConferenceScheduleSchema = Joi.object({
       "string.pattern.base": "Year must only contain numbers.",
     }),
 
-  start_date: Joi.date().iso().messages({
+  start_date: Joi.date().format("YYYY-MM-DD").messages({
     "date.base": "Start date must be a valid date.",
-    "date.format": "Start date must be in ISO format (YYYY-MM-DDTHH:mm:ssZ).",
+    "date.format": "Start date must be in YYYY-MM-DD format.",
   }),
 
-  end_date: Joi.date().iso().messages({
-    "date.base": "End date must be a valid date.",
-    "date.format": "End date must be in ISO format (YYYY-MM-DDTHH:mm:ssZ).",
-  }),
+  end_date: Joi.date()
+    .format("YYYY-MM-DD")
+    .greater(Joi.ref("start_date"))
+    .messages({
+      "date.base": "End date must be a valid date.",
+      "date.format": "End date must be in YYYY-MM-DD format.",
+      "date.greater": "End date must be after the start date.",
+    }),
 
   type: Joi.string()
     .valid(...Object.values(ConferenceScheduleType))

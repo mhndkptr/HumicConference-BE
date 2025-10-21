@@ -50,6 +50,9 @@ class ConferenceScheduleController {
       }
     }
 
+    value.start_date = new Date(value.start_date + "T00:00:00Z");
+    value.end_date = new Date(value.end_date + "T00:00:00Z");
+
     const data = await ConferenceScheduleService.create(value);
 
     return createdResponse(
@@ -66,6 +69,13 @@ class ConferenceScheduleController {
 
     const { id } = req.params;
     const value = req.body;
+
+    if (value.start_date) {
+      value.start_date = new Date(value.start_date + "T00:00:00Z");
+    }
+    if (value.end_date) {
+      value.end_date = new Date(value.end_date + "T00:00:00Z");
+    }
 
     const data = await ConferenceScheduleService.update(id, value, req.user);
 
