@@ -57,7 +57,7 @@ model User {
   @@map("users")
 }
 
-model Conference_Schedule {
+model ConferenceSchedule {
   id                                  String    @id @default(uuid())
   name                                String
   description                         String
@@ -94,7 +94,7 @@ model Schedule {
   updated_at             DateTime  @updatedAt
   
   rooms                  Room[]
-  Conference_Schedule    Conference_Schedule  @relation(fields: [conference_schedule_id], references: [id], onDelete: Cascade)
+  conference_schedule    ConferenceSchedule  @relation(fields: [conference_schedule_id], references: [id], onDelete: Cascade)
 
   @@map("schedules")
 }
@@ -128,13 +128,13 @@ model Track {
   created_at              DateTime  @default(now())
   updated_at              DateTime  @updatedAt
 
-  track_sessions          Track_Session[]
+  track_sessions          TrackSession[]
   room                    Room?
 
   @@map("tracks")
 }
 
-model Track_Session {
+model TrackSession {
   id                     String      @id @default(uuid())
   paper_id               String
   title                  String
@@ -153,7 +153,7 @@ model Track_Session {
   @@map("track_sessions")
 }
 
-model About_Conference_Schedule {
+model AboutConferenceSchedule {
   id                     String      @id @default(uuid())
   type                   ConferenceScheduleType
   title                  String

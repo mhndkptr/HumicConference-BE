@@ -11,6 +11,7 @@ export class PrismaService extends PrismaClient {
       createSoftDeleteMiddleware({
         models: {
           User: true,
+          Conference_Schedule: true,
         },
         defaultConfig: {
           field: "deleted_at",
