@@ -102,12 +102,12 @@ model Schedule {
 model Room {
   id                       String      @id @default(uuid())
   name                     String
-  identifier               String?
+  identifier               String?     @unique
   description              String?
   type                     RoomType
   online_meeting_url       String?
-  start_time               String
-  end_time                 String
+  start_time               String?
+  end_time                 String?
   schedule_id              String
   track_id                 String?      @unique
 
