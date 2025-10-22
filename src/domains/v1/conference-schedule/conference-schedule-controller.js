@@ -31,7 +31,7 @@ class ConferenceScheduleController {
   }
 
   async getForUserView(req, res) {
-    const { year, type } = req.params;
+    const { year, type } = req.validatedParams;
 
     const data = await ConferenceScheduleService.getForUserView(year, type);
 
