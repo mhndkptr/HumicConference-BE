@@ -6,10 +6,12 @@ import Role from "../../../common/enums/role-enum.js";
 import ConferenceScheduleType from "../../../common/enums/conference-schedule-type-enum.js";
 import roomQueryConfig from "./room-query-config.js";
 import RoomType from "../../../common/enums/room-type-enum.js";
+import TrackService from "../track/track-service.js";
 
 class RoomService {
   constructor() {
     this.prisma = new PrismaService();
+    this.TrackService = TrackService;
   }
 
   async getAll(query) {
@@ -160,11 +162,7 @@ class RoomService {
     }
 
     if (value?.track) {
-      const createdTrack = await this.prisma.track.create({
-        data: {
-          ...value.track,
-        },
-      });
+      const createdTrack = await this.TrackService.create(value.track);
 
       delete value.track;
 
@@ -292,12 +290,11 @@ class RoomService {
     }
 
     if (value?.track && data.track_id) {
-      const updatedTrack = await this.prisma.track.update({
-        where: { id: data.track_id },
-        data: {
-          ...value.track,
-        },
-      });
+      const updatedTrack = await this.TrackService.update(
+        data.track_id,
+        value.track,
+        user
+      );
 
       delete value.track;
     }
