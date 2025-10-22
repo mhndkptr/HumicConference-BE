@@ -14,3 +14,155 @@ datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
 }
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN_ICICYTA
+  ADMIN_ICODSA
+}
+
+enum ConferenceScheduleType {
+  ICICYTA
+  ICODSA
+}
+
+enum RoomType {
+  MAIN
+  PARALLEL
+}
+
+enum ScheduleType {
+  TALK
+  BREAK
+  ONE_DAY_ACTIVITY
+}
+
+enum SessionModeTime {
+  ONLINE
+  OFFLINE
+}
+
+model User {
+  id           String    @id @default(uuid())
+  name         String
+  email        String
+  password     String
+  profile_uri  String?
+  role         UserRole  
+  verified_at  DateTime?
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+  deleted_at   DateTime?
+
+  @@map("users")
+}
+
+model ConferenceSchedule {
+  id                                  String    @id @default(uuid())
+  name                                String
+  description                         String
+  year                                String
+  start_date                          DateTime
+  end_date                            DateTime
+  type                                ConferenceScheduleType
+  contact_email                       String  
+  timezone_iana                       String
+  onsite_presentation                 String
+  online_presentation                 String 
+  notes                               String?
+  no_show_policy                      String?
+
+  created_at                          DateTime  @default(now())
+  updated_at                          DateTime  @updatedAt
+  deleted_at                          DateTime?
+
+  schedules                           Schedule[]
+
+  @@map("conference_schedules")
+}
+
+model Schedule {
+  id                     String      @id @default(uuid())
+  date                   DateTime
+  start_time             String?
+  end_time               String?
+  type                   ScheduleType
+  notes                  String?
+  conference_schedule_id String
+  
+  created_at             DateTime  @default(now())
+  updated_at             DateTime  @updatedAt
+  
+  rooms                  Room[]
+  conference_schedule    ConferenceSchedule  @relation(fields: [conference_schedule_id], references: [id], onDelete: Cascade)
+
+  @@map("schedules")
+}
+
+model Room {
+  id                       String      @id @default(uuid())
+  name                     String
+  identifier               String?     
+  description              String?
+  type                     RoomType
+  online_meeting_url       String?
+  start_time               String?
+  end_time                 String?
+  schedule_id              String
+  track_id                 String?      @unique
+
+  created_at               DateTime  @default(now())
+  updated_at               DateTime  @updatedAt
+
+  schedule                 Schedule  @relation(fields: [schedule_id], references: [id], onDelete: Cascade)
+  track                    Track?  @relation(fields: [track_id], references: [id], onDelete: Cascade)
+
+  @@map("rooms")
+}
+
+model Track {
+  id                      String      @id @default(uuid())
+  name                    String
+  description             String?
+
+  created_at              DateTime  @default(now())
+  updated_at              DateTime  @updatedAt
+
+  track_sessions          TrackSession[]
+  room                    Room?
+
+  @@map("tracks")
+}
+
+model TrackSession {
+  id                     String      @id @default(uuid())
+  paper_id               String
+  title                  String
+  authors                String
+  mode                   SessionModeTime
+  notes                  String?
+  start_time             String
+  end_time               String
+  track_id               String
+
+  created_at             DateTime  @default(now())
+  updated_at             DateTime  @updatedAt
+
+  track                  Track  @relation(fields: [track_id], references: [id], onDelete: Cascade)
+
+  @@map("track_sessions")
+}
+
+model AboutConferenceSchedule {
+  id                     String      @id @default(uuid())
+  type                   ConferenceScheduleType
+  title                  String
+  description            String
+  contact                String
+  organizer              String
+
+  created_at             DateTime  @default(now())
+  updated_at             DateTime  @updatedAt
+
+  @@map("about_conference_Schedules")
+}

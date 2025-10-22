@@ -14,7 +14,7 @@ You will need the following software installed on your system:
 
 - **Node.js** (version 22.18.0 or higher recommended)
 - **npm** (Node Package Manager) or **yarn**
-- A database system (e.g., **PostgreSQL**, **MySQL**).
+- A database system **PostgreSQL**.
 
 ### Installation
 
@@ -36,13 +36,21 @@ You will need the following software installed on your system:
 3.  **Configure Environment Variables:**
     Create a `.env` file in the root directory and add your configuration details.
 
-    _Example `.env` content:_
+    **a. Copy the example environment file:**
+
+    ```bash
+    cp .env.example .env
+    ```
+
+    **b. Open the .env file and adjust the values as needed to match your local environment.**
+    Example .env configuration:
 
     ```
-    PORT=3000
+    APP_PORT=3000
     NODE_ENV=development
     DATABASE_URL=postgresql://userdb:secretpass@localhost:5432/humic_conference_db?schema=public
     JWT_SECRET=your_super_secret_key
+    etc...
     ```
 
 4.  **Run the application:**
