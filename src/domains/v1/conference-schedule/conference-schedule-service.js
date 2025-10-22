@@ -47,11 +47,7 @@ class ConferenceScheduleService {
           include: {
             rooms: {
               include: {
-                track: {
-                  include: {
-                    track_sessions: true,
-                  },
-                },
+                track: true,
               },
             },
           },
