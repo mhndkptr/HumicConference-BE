@@ -60,6 +60,27 @@ class ConferenceScheduleService {
     return data;
   }
 
+  async getForUserView(year, type) {
+    const data = await this.prisma.conferenceSchedule.findFirst({
+      where: { year: year, type: type },
+      include: {
+        schedules: {
+          include: {
+            rooms: {
+              include: {
+                track: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!data) throw BaseError.notFound("Conference Schedule not found.");
+
+    return data;
+  }
+
   async create(value) {
     const yearExist = await this.prisma.conferenceSchedule.findFirst({
       where: {

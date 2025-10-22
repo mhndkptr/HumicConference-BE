@@ -2,7 +2,7 @@ import BaseRoutes from "../../../base-classes/base-routes.js";
 import Role from "../../../common/enums/role-enum.js";
 import authTokenMiddleware from "../../../middlewares/auth-token-middleware.js";
 import validateCredentials from "../../../middlewares/validate-credentials-middleware.js";
-import validateParamsCredentials from "../../../middlewares/validate-params-credentials-middleware.js";
+import validateQueryParamsCredentials from "../../../middlewares/validate-query-params-credentials-middleware.js";
 import tryCatch from "../../../utils/tryCatcher.js";
 import UserController from "./user-controller.js";
 import {
@@ -17,7 +17,7 @@ class UserRoutes extends BaseRoutes {
     this.router.get("/", [
       authTokenMiddleware.authenticate,
       authTokenMiddleware.authorizeRoles([Role.SUPER_ADMIN]),
-      validateParamsCredentials(getAllUsersParamsSchema),
+      validateQueryParamsCredentials(getAllUsersParamsSchema),
       tryCatch(UserController.getAll),
     ]);
     this.router.get("/:id", [
@@ -39,7 +39,7 @@ class UserRoutes extends BaseRoutes {
     this.router.delete("/:id", [
       authTokenMiddleware.authenticate,
       authTokenMiddleware.authorizeRoles([Role.SUPER_ADMIN]),
-      validateParamsCredentials(deleteUserParamsSchema),
+      validateQueryParamsCredentials(deleteUserParamsSchema),
       tryCatch(UserController.delete),
     ]);
   }
