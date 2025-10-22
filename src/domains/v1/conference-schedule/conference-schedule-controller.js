@@ -30,6 +30,18 @@ class ConferenceScheduleController {
     );
   }
 
+  async getForUserView(req, res) {
+    const { year, type } = req.validatedParams;
+
+    const data = await ConferenceScheduleService.getForUserView(year, type);
+
+    return successResponse(
+      res,
+      data,
+      "Conference Schedule data retrieved successfully"
+    );
+  }
+
   async create(req, res) {
     if (req.body == undefined) {
       throw BaseError.badRequest("Request body is missing");

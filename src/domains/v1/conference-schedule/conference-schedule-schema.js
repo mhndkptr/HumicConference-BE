@@ -4,6 +4,28 @@ import ConferenceScheduleType from "../../../common/enums/conference-schedule-ty
 
 const Joi = JoiBase.extend(JoiDate);
 
+const getConferenceScheduleForUserViewParamsSchema = Joi.object({
+  year: Joi.string()
+    .length(4)
+    .pattern(/^[0-9]+$/)
+    .required()
+    .messages({
+      "string.empty": "Year is required.",
+      "string.length": "Year must be 4 digits (e.g., 2025).",
+      "string.pattern.base": "Year must only contain numbers.",
+    }),
+  type: Joi.string()
+    .valid(...Object.values(ConferenceScheduleType))
+    .required()
+    .messages({
+      "any.only": `Type must be one of: ${Object.values(
+        ConferenceScheduleType
+      ).join(", ")}`,
+      "string.empty": "Type is required.",
+      "any.required": "Type is required.",
+    }),
+});
+
 const getAllConferenceScheduleParamsSchema = Joi.object({
   get_all: Joi.boolean().optional().default(true),
 
@@ -194,4 +216,5 @@ export {
   updateConferenceScheduleSchema,
   deleteConferenceScheduleParamsSchema,
   getAllConferenceScheduleParamsSchema,
+  getConferenceScheduleForUserViewParamsSchema,
 };

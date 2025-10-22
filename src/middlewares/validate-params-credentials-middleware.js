@@ -1,5 +1,5 @@
 const validateParamsCredentials = (schema) => (req, res, next) => {
-  const validated = schema.validate(req.query, {
+  const validated = schema.validate(req.params, {
     abortEarly: false,
     errors: {
       wrap: {
@@ -12,7 +12,7 @@ const validateParamsCredentials = (schema) => (req, res, next) => {
   if (validated.error) {
     next(validated.error);
   } else {
-    req.validatedQuery = validated.value;
+    req.validatedParams = validated.value;
     next();
   }
 };
