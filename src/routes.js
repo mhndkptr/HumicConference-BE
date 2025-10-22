@@ -5,6 +5,7 @@ import conferenceScheduleRoutes from "./domains/v1/conference-schedule/conferenc
 import scheduleRoutes from "./domains/v1/schedule/schedule-routes.js";
 import roomRoutes from "./domains/v1/room/room-routes.js";
 import trackRoutes from "./domains/v1/track/track-routes.js";
+import trackSessionRoutes from "./domains/v1/track-session/track-session-routes.js";
 
 const router = express.Router();
 
@@ -32,6 +33,10 @@ const appsV1Routes = [
   {
     path: "/track",
     route: trackRoutes,
+  },
+  {
+    path: "/track-session",
+    route: trackSessionRoutes,
   },
 ];
 
