@@ -12,6 +12,7 @@ const corsMiddleware = cors({
     }
   },
   credentials: true,
+  // exposedHeaders: ["Authorization"],  
 });
 
 export default corsMiddleware;
