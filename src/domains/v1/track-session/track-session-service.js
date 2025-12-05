@@ -192,8 +192,8 @@ class TrackSessionService {
       where: { id },
       select: {
         track: {
-          id: true,
           select: {
+            id: true,
             room: {
               select: {
                 id: true,
