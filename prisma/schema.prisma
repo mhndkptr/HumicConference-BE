@@ -65,6 +65,7 @@ model ConferenceSchedule {
   start_date                          DateTime
   end_date                            DateTime
   type                                ConferenceScheduleType
+  is_active                           Boolean    @default(false)
   contact_email                       String  
   timezone_iana                       String
   onsite_presentation                 String

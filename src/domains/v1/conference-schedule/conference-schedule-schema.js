@@ -4,6 +4,19 @@ import ConferenceScheduleType from "../../../common/enums/conference-schedule-ty
 
 const Joi = JoiBase.extend(JoiDate);
 
+const getConferenceScheduleActiveParamsSchema = Joi.object({
+  type: Joi.string()
+    .valid(...Object.values(ConferenceScheduleType))
+    .required()
+    .messages({
+      "any.only": `Type must be one of: ${Object.values(
+        ConferenceScheduleType
+      ).join(", ")}`,
+      "string.empty": "Type is required.",
+      "any.required": "Type is required.",
+    }),
+});
+
 const getConferenceScheduleForUserViewParamsSchema = Joi.object({
   year: Joi.string()
     .length(4)
@@ -58,6 +71,7 @@ const getAllConferenceScheduleParamsSchema = Joi.object({
       .valid(ConferenceScheduleType.ICICYTA, ConferenceScheduleType.ICODSA)
       .optional(),
     year: Joi.string().min(4).max(4).optional(),
+    is_active: Joi.boolean().optional(),
   }),
 });
 
@@ -110,6 +124,11 @@ const createConferenceScheduleSchema = Joi.object({
       "string.empty": "Type is required.",
       "any.required": "Type is required.",
     }),
+
+  is_active: Joi.boolean().required().messages({
+    "boolean.base": "Is active must be a boolean.",
+    "any.required": "Is active is required.",
+  }),
 
   contact_email: Joi.string().email().required().messages({
     "string.empty": "Contact email is required.",
@@ -178,6 +197,10 @@ const updateConferenceScheduleSchema = Joi.object({
       ).join(", ")}`,
     }),
 
+  is_active: Joi.boolean().messages({
+    "boolean.base": "Is active must be a boolean.",
+  }),
+
   contact_email: Joi.string().email().messages({
     "string.email": "Contact email must be a valid email address.",
   }),
@@ -217,4 +240,5 @@ export {
   deleteConferenceScheduleParamsSchema,
   getAllConferenceScheduleParamsSchema,
   getConferenceScheduleForUserViewParamsSchema,
+  getConferenceScheduleActiveParamsSchema,
 };

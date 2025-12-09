@@ -33,22 +33,20 @@ const getAllRoomParamsSchema = Joi.object({
       year: Joi.string()
         .length(4)
         .pattern(/^[0-9]+$/)
-        .required()
+        .optional()
         .messages({
-          "string.empty": "Year is required.",
           "string.length": "Year must be 4 digits (e.g., 2025).",
           "string.pattern.base": "Year must only contain numbers.",
         }),
       type: Joi.string()
         .valid(...Object.values(ConferenceScheduleType))
-        .required()
+        .optional()
         .messages({
           "any.only": `Type must be one of: ${Object.values(
             ConferenceScheduleType
           ).join(", ")}`,
-          "string.empty": "Type is required.",
-          "any.required": "Type is required.",
         }),
+      is_active: Joi.boolean().optional(),
     }).optional(),
   })
     .oxor("conference_schedule_id", "conference_schedule")

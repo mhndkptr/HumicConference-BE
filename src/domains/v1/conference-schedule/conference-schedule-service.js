@@ -103,7 +103,27 @@ class ConferenceScheduleService {
       throw new Joi.ValidationError(validation, stack);
     }
 
-    const data = await this.prisma.conferenceSchedule.create({ data: value });
+    let data = null;
+
+    if (value.is_active === true) {
+      const result = await this.prisma.$transaction([
+        this.prisma.conferenceSchedule.updateMany({
+          where: {
+            type: value.type,
+            is_active: true,
+          },
+          data: {
+            is_active: false,
+          },
+        }),
+        this.prisma.conferenceSchedule.create({
+          data: value,
+        }),
+      ]);
+      data = result[1];
+    } else {
+      data = await this.prisma.conferenceSchedule.create({ data: value });
+    }
 
     return data;
   }
@@ -115,11 +135,14 @@ class ConferenceScheduleService {
 
     if (!data) throw BaseError.notFound("Conference Schedule not found.");
 
+    const targetType = value?.type || data.type;
+    const targetYear = value?.year || data.year;
+
     const yearExist = await this.prisma.conferenceSchedule.findFirst({
       where: {
         id: { not: id },
-        year: value.year,
-        type: value.type,
+        year: targetYear,
+        type: targetType,
       },
     });
 
@@ -150,10 +173,32 @@ class ConferenceScheduleService {
       }
     }
 
-    const updatedSchedule = await this.prisma.conferenceSchedule.update({
-      where: { id },
-      data: value,
-    });
+    let updatedSchedule = null;
+
+    if (value?.is_active && value?.is_active === true) {
+      const result = await this.prisma.$transaction([
+        this.prisma.conferenceSchedule.updateMany({
+          where: {
+            type: targetType,
+            is_active: true,
+            id: { not: id },
+          },
+          data: {
+            is_active: false,
+          },
+        }),
+        this.prisma.conferenceSchedule.update({
+          where: { id },
+          data: value,
+        }),
+      ]);
+      updatedSchedule = result[1];
+    } else {
+      updatedSchedule = await this.prisma.conferenceSchedule.update({
+        where: { id },
+        data: value,
+      });
+    }
 
     return updatedSchedule;
   }
