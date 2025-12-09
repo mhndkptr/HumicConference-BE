@@ -85,6 +85,7 @@ class ConferenceScheduleService {
     const yearExist = await this.prisma.conferenceSchedule.findFirst({
       where: {
         year: value.year,
+        type: value.type,
       },
     });
 
@@ -118,6 +119,7 @@ class ConferenceScheduleService {
       where: {
         id: { not: id },
         year: value.year,
+        type: value.type,
       },
     });
 
