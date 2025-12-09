@@ -28,6 +28,20 @@ class RoomService {
       };
     }
 
+    if (query.advSearch?.conference_schedule) {
+      if (!options.where) {
+        options.where = {};
+      }
+
+      options.where.schedule = {
+        ...options.where.schedule,
+        conference_schedule: {
+          year: query.advSearch.conference_schedule.year,
+          type: query.advSearch.conference_schedule.type,
+        },
+      };
+    }
+
     const [data, count] = await Promise.all([
       this.prisma.room.findMany(options),
       this.prisma.room.count({
