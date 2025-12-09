@@ -1,5 +1,6 @@
 import Joi from "joi";
 import RoomType from "../../../common/enums/room-type-enum.js";
+import ConferenceScheduleType from "../../../common/enums/conference-schedule-type-enum.js";
 
 const timePattern = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
@@ -28,7 +29,28 @@ const getAllRoomParamsSchema = Joi.object({
 
   advSearch: Joi.object({
     conference_schedule_id: Joi.string().uuid().optional(),
-  }).optional(),
+    conference_schedule: Joi.object({
+      year: Joi.string()
+        .length(4)
+        .pattern(/^[0-9]+$/)
+        .optional()
+        .messages({
+          "string.length": "Year must be 4 digits (e.g., 2025).",
+          "string.pattern.base": "Year must only contain numbers.",
+        }),
+      type: Joi.string()
+        .valid(...Object.values(ConferenceScheduleType))
+        .optional()
+        .messages({
+          "any.only": `Type must be one of: ${Object.values(
+            ConferenceScheduleType
+          ).join(", ")}`,
+        }),
+      is_active: Joi.boolean().optional(),
+    }).optional(),
+  })
+    .oxor("conference_schedule_id", "conference_schedule")
+    .optional(),
 
   include_relation: Joi.array()
     .items(Joi.string().valid("schedule", "track"))

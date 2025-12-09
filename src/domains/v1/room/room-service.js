@@ -28,6 +28,28 @@ class RoomService {
       };
     }
 
+    if (query.advSearch?.conference_schedule) {
+      if (!options.where) {
+        options.where = {};
+      }
+
+      options.where.schedule = {
+        ...options.where.schedule,
+        conference_schedule: {
+          ...(query?.advSearch?.conference_schedule?.year && {
+            year: query.advSearch.conference_schedule.year,
+          }),
+          ...(query?.advSearch?.conference_schedule?.type && {
+            type: query.advSearch.conference_schedule.type,
+          }),
+          ...(typeof query?.advSearch?.conference_schedule?.is_active ===
+            "boolean" && {
+            is_active: query.advSearch.conference_schedule.is_active,
+          }),
+        },
+      };
+    }
+
     const [data, count] = await Promise.all([
       this.prisma.room.findMany(options),
       this.prisma.room.count({

@@ -1,6 +1,6 @@
 const conferenceScheduleQueryConfig = {
   searchableFields: [],
-  filterableFields: ["type", "year"],
+  filterableFields: ["type", "year", "is_active"],
   hasSoftDelete: true,
   relations: {
     schedules: {

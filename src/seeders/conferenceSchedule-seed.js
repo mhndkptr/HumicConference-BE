@@ -40,6 +40,7 @@ class ConferenceScheduleSeeder {
           start_date: this.createDate("2024-12-17"),
           end_date: this.createDate("2024-12-19"),
           type: ConferenceScheduleType.ICICYTA, // Enum
+          is_active: true,
           contact_email: "icicyta@telkomuniversity.ac.id",
           timezone_iana: this.timezoneIana,
           onsite_presentation:
